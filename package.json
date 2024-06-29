@@ -1,0 +1,30 @@
+{
+    "name": "cmake-template",
+    "version": "1.0.0",
+    "description": "A cli for generating cmake projects",
+    "main": "build/main.js",
+    "man": "./man/doc.1",
+    "bin": {
+        "cmake-template": "build/main.js"
+    },
+    "scripts": {
+        "start": "node .",
+        "watch": "npm run build && tsc -w",
+        "build": "tsc"
+    },
+    "author": "cactoes",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cactoes/cmake-template"
+    },
+    "devDependencies": {
+        "@types/fs-extra": "^11.0.4",
+        "@types/node": "^20.14.9",
+        "@typescript-eslint/eslint-plugin": "^6.8.0",
+        "@typescript-eslint/parser": "^6.8.0",
+        "eslint": "^8.51.0"
+    },
+    "dependencies": {
+        "fs-extra": "^11.2.0"
+    }
+}

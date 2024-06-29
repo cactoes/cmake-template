@@ -1,0 +1,8 @@
+# typescript
+build/
+
+# node
+node_modules
+
+# editors
+.vscode/
