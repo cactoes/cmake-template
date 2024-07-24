@@ -1,1 +1,5 @@
-# remove this once you have deps
+# ~~ ignore all libs & includes
+**/lib/*
+!**/lib/.gitignore
+**/include/*
+!**/include/.gitignore
