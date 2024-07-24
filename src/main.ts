@@ -51,14 +51,32 @@ function main(argc: number, argv: string[]): number {
     for (const item of fs.readdirSync(template_dir))
         fse.cpSync(path.join(template_dir, item), path.join(target_path, item), { recursive: true });
 
-    // replace the vars in the main cmake file
-    write_variables(path.join(target_path, "CMakeLists.txt"), variables);
+    function recursive_set_variables(full_path: string): void {
+        if (fs.lstatSync(full_path).isDirectory())
+            for (const item of fs.readdirSync(full_path))
+                recursive_set_variables(path.join(full_path, item));
+        else
+            write_variables(full_path, variables);
+    }
+    recursive_set_variables(target_path);
 
-    // replace the vars in the project file
-    write_variables(path.join(target_path, "src/$PROJECT_NAME", "CMakeLists.txt"), variables);
+    function recursive_rename_folders(full_path: string): void {
+        if (!fs.lstatSync(full_path).isDirectory())
+            return;
 
-    // rename the folder
-    fs.renameSync(path.join(target_path, "src/$PROJECT_NAME"), path.join(target_path, `src/${variables["$PROJECT_NAME"]}`));
+        for (const item of fs.readdirSync(full_path)) {
+            let real_path = path.join(full_path, item);
+
+            if (Object.keys(variables).includes(item)) {
+                const updated_path = path.join(full_path, variables[item as keyof typeof variables]);
+                fs.renameSync(real_path, updated_path);
+                real_path = updated_path;
+            }
+
+            recursive_rename_folders(real_path);
+        }
+    }
+    recursive_rename_folders(target_path);
 
     console.log("Successfully created cmake template");
 
